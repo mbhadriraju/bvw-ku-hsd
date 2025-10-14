@@ -1,8 +1,19 @@
+'use client'
+
 import Image from "next/image";
 import VantaBackground from "../components/VantaBackground"
 import Input from "../components/Input"
+import { useState } from "react";
 
 export default function Home() {
+  const [title, setTitle] = useState("");
+  const [subtitle, setSubtitle] = useState("");
+  const [bottomText, setBottomText] = useState("");
+
+  function uploadImage() {
+    console.log("Image uploaded")
+  }
+
   return (
     <div>
       <div className="position-relative">
@@ -19,9 +30,10 @@ export default function Home() {
             <h1 className="text-4xl font-title mb-4">Edit your poster</h1>
         </div>
         <div className="space-y-30 mt-12">
-            <Input placeholder="Title" className="h-15"/>
-            <Input placeholder="Subtitle" className="h-15"/>
-            <Input placeholder="Bottom Text" className="h-15"/>
+            <Input placeholder="Title" className="h-15" onChange={(e) => setTitle(e.target.value)}/>
+            <Input placeholder="Subtitle" className="h-15" onChange={(e) => setSubtitle(e.target.value)}/>
+            <Input placeholder="Bottom Text" className="h-15" onChange={(e) => setSubtitle(e.target.value)}/>
+            <button className="w-full transition-all duration-100 bg-gray-300 hover:bg-gray-400 text-black font-title py-2 px-4 rounded-xl mt-10 h-15 text-2xl" onClick={uploadImage}>Upload Image</button>
         </div>
         </div>
 
@@ -34,6 +46,9 @@ export default function Home() {
             height={800}
             className="rounded-lg shadow-lg"
           />
+          <p>{title}</p>
+          <p>{subtitle}</p>
+          <p>{bottomText}</p>
         </div>
       </div>
     </div>
