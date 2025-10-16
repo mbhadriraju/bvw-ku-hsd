@@ -3,15 +3,21 @@
 import Image from "next/image";
 import VantaBackground from "../components/VantaBackground"
 import Input from "../components/Input"
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export default function Home() {
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [bottomText, setBottomText] = useState("");
+  const fileInput = useRef<HTMLInputElement>(null);
 
-  function uploadImage() {
-    console.log("Image uploaded")
+  async function uploadFile() {
+    const formData = new FormData();
+
+    if (fileInput.current?.files) {
+      formData.append('file', fileInput.current.files[0]);
+      console.log("Submitted")
+    }
   }
 
   return (
@@ -33,7 +39,7 @@ export default function Home() {
             <Input placeholder="Title" className="h-15" onChange={(e) => setTitle(e.target.value)}/>
             <Input placeholder="Subtitle" className="h-15" onChange={(e) => setSubtitle(e.target.value)}/>
             <Input placeholder="Bottom Text" className="h-15" onChange={(e) => setSubtitle(e.target.value)}/>
-            <button className="w-full transition-all duration-100 bg-gray-300 hover:bg-gray-400 text-black font-title py-2 px-4 rounded-xl mt-10 h-15 text-2xl" onClick={uploadImage}>Upload Image</button>
+            <input className="w-full transition-all duration-100 bg-gray-300 hover:bg-gray-400 text-black font-title py-2 px-4 rounded-xl mt-10 h-15 text-2xl" type="file" ref={fileInput} placeholder="Upload Image" onClick={uploadFile}/>
         </div>
         </div>
 
