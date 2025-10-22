@@ -121,7 +121,7 @@ export default function Home() {
               defaultValue={30}
               min={8}
               max={50}
-              onChange={(e) => setTitleSize(e.target?.value as number)}
+              onChange={(e, value) => setTitleSize(value as number)}
             />
             <p className="font-subtitle text-gray-700">Title Position: {titlePosition}</p>
             <Slider
@@ -129,7 +129,7 @@ export default function Home() {
               defaultValue={8}
               min={5}
               max={30}
-              onChange={(e) => setTitlePosition(e.target?.value as number)}
+              onChange={(e, value) => setTitlePosition(value as number)}
             />
             <div className="flex flex-row">
               <Input placeholder="Subtitle" className="h-15" onChange={(e) => setSubtitle(e.target.value)}/>
@@ -149,7 +149,7 @@ export default function Home() {
               defaultValue={16}
               min={4}
               max={30}
-              onChange={(e) => setSubtitleSize(e.target?.value as number)}
+              onChange={(e, value) => setSubtitleSize(value as number)}
             />
             <p className="font-subtitle text-gray-700">Subtitle Position: {subTitlePosition}</p>
             <Slider
@@ -157,7 +157,7 @@ export default function Home() {
               defaultValue={15}
               min={10}
               max={65}
-              onChange={(e) => setSubtitlePosition(e.target?.value as number)}
+              onChange={(e, value) => setSubtitlePosition(value as number)}
             />
             <div className="flex flex-row">
               <Input placeholder="Bottom Text" className="h-15" onChange={(e) => setBottomText(e.target.value)}/>
@@ -177,7 +177,7 @@ export default function Home() {
               defaultValue={12}
               min={2}
               max={28}
-              onChange={(e) => setBottomTextSize(e.target?.value as number)}
+              onChange={(e) => setBottomTextSize(value as number)}
             />
             <p className="font-subtitle text-gray-700">Bottom Text Position: {bottomtextPosition}</p>
             <Slider
@@ -185,7 +185,7 @@ export default function Home() {
               defaultValue={68}
               min={50}
               max={75}
-              onChange={(e) => setBottomTextPosition(e.target?.value as number)}
+              onChange={(e, value) => setBottomTextPosition(value as number)}
             />
             <input
               id="file-upload"
@@ -206,7 +206,7 @@ export default function Home() {
               defaultValue={24}
               min={10}
               max={40}
-              onChange={(e) => setImagePosition(e.target?.value as number)}
+              onChange={(e, value) => setImagePosition(value as number)}
             />
             <p className="font-subtitle text-gray-700">Border Radius: {borderRadius}</p>
             <Slider
@@ -214,7 +214,7 @@ export default function Home() {
               defaultValue={0}
               min={0}
               max={100}
-              onChange={(e) => setBorderRadius(e.target?.value as number)}
+              onChange={(e, value) => setBorderRadius(value as number)}
             />
             <p className="font-subtitle text-gray-700">Border Thickness: {borderThickness}</p>
             <Slider
@@ -222,7 +222,7 @@ export default function Home() {
               defaultValue={0}
               min={0}
               max={20}
-              onChange={(e) => setBorderThickness(e.target?.value as number)}
+              onChange={(e, value) => setBorderThickness(value as number)}
             />
             <p className="font-subtitle text-gray-700">Border Color: {borderColor}</p>
             <select
