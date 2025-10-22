@@ -17,7 +17,8 @@ export default function VantaBackground() {
             midtoneColor: 0xc8898d,
             lowlightColor: 0xdfdfdf,
             baseColor: 0xffe0cd,
-            blurFactor: 0.50
+            blurFactor: 0.50,
+            preserveDrawingBuffer: true 
         })
       );
     }

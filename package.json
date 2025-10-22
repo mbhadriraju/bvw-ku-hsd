@@ -9,7 +9,15 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@heroui/react": "^2.8.5",
+    "@heroui/slider": "^2.4.24",
+    "@mui/material": "^7.3.4",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.3",
     "next": "15.5.4",
+    "puppeteer": "^24.25.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "three": "^0.180.0",
