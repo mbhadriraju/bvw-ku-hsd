@@ -1,22 +1,19 @@
-'use client'
+"use client";
 
-import VantaBackground from "../components/VantaBackground"
-import Input from "../components/Input"
-import { useState, useRef, useEffect } from "react";
-import Slider from '@mui/material/Slider';
+import { useState, useRef } from "react";
+import { motion } from "framer-motion";
 import html2canvas from "html2canvas";
 
+import VantaBackground from "../components/VantaBackground";
+import Poster from "../components/Poster";
+import CustomizeText from "../components/CustomizeText";
+import CustomizeImage from "../components/CustomizeImage";
 
 export default function Home() {
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [bottomText, setBottomText] = useState("");
-  const fileInput = useRef<HTMLInputElement>(null);
-  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
-  const [option, setOption] = useState("option1");
-  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
-  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
-  const [titleSize, setTitleSize] = useState(30)
+  const [titleSize, setTitleSize] = useState(30);
   const [subtitleSize, setSubtitleSize] = useState(16);
   const [bottomTextSize, setBottomTextSize] = useState(12);
   const [titleFont, setTitleFont] = useState("font-1");
@@ -25,39 +22,31 @@ export default function Home() {
   const [titlePosition, setTitlePosition] = useState(8);
   const [subTitlePosition, setSubtitlePosition] = useState(15);
   const [bottomtextPosition, setBottomTextPosition] = useState(68);
+  const [imageSize, setImageSize] = useState(300);
   const [imagePosition, setImagePosition] = useState(24);
   const [borderRadius, setBorderRadius] = useState(0);
   const [borderThickness, setBorderThickness] = useState(0);
   const [borderColor, setBorderColor] = useState("black");
+  const [option, setOption] = useState("option1");
+  const [editMode, setEditMode] = useState("text");
+  const [titleColor, setTitleColor] = useState("black");
+  const [subTitleColor, setSubTitleColor] = useState("black");
+  const [bottomTextColor, setBottomTextColor] = useState("black");
 
-  async function uploadFile(e?: React.ChangeEvent<HTMLInputElement>) {
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  async function uploadFile(e: any) {
     const formData = new FormData();
     const files = e?.target?.files ?? fileInput.current?.files;
-
     if (files && files[0]) {
       formData.append("file", files[0]);
       setSelectedFileName(files[0].name);
-      console.log("Submitted", files[0].name);
-      try {
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!response.ok) {
-          const text = await response.text();
-          console.error('Error uploading file:', response.status, response.statusText, text);
-          return;
-        }
-        try {
-          const data = await response.json();
-          console.log('Upload response:', data);
-          if (data && data.url) setUploadedUrl(data.url);
-        } catch (e) {
-          console.log('Upload succeeded but response not JSON');
-        }
-      } catch (error) {
-        console.error('Network error uploading file:', error);
+      const response = await fetch("/api/upload", { method: "POST", body: formData });
+      if (response.ok) {
+        const data = await response.json();
+        setUploadedUrl(data.url);
       }
     }
   }
@@ -65,225 +54,231 @@ export default function Home() {
   async function downloadFile() {
     const poster = document.getElementById("poster");
     if (!poster) return;
-
-    const rect = poster.getBoundingClientRect();
-
-    const canvas = await html2canvas(poster, {
-      useCORS: true,
-      width: rect.width,
-      height: rect.height,
-      scrollX: 0,
-      scrollY: 0,
-      windowWidth: rect.width,
-      windowHeight: rect.height,
-    });
-
-    const dataUrl = canvas.toDataURL("image/png");
+    const canvas = await html2canvas(poster, { useCORS: true });
     const a = document.createElement("a");
-    a.href = dataUrl;
+    a.href = canvas.toDataURL("image/png");
     a.download = "WildWestPoster.png";
-    document.body.appendChild(a);
     a.click();
-    a.remove();
   }
 
   return (
-    <div>
-      <div className="position-relative">
-        <VantaBackground />
-      </div>
-      <div className="justify-center flex flex-col items-center">
-        <h1 className="text-8xl font-3 underline mt-10">Wild West Poster Generator</h1>
-        <h2 className="text-4xl font-1 mt-20">Generate your Wild West Poster in 3 easy steps!</h2>
-        <p className="mt-10 font-subtitle text-xl">1. Upload your image!<br />2. Customize your poster!<br />3. Download and print!</p>
-      </div>
-      <div className="flex mt-20 items-start gap-10">
-        <div className="flex-1">
-        <div className="items-center justify-center flex flex-col">
-            <h1 className="text-4xl font-1 mb-4">Edit your poster</h1>
-        </div>
-        <div className="space-y-3 mt-12">
-            <div className="flex flex-row">
-              <Input placeholder="Title" className="h-15" onChange={(e) => setTitle(e.target.value)}/>
-              <select
-                value={titleFont}
-                onChange={(e) => setTitleFont(e.target.value)}
-                className="text-center focus:outline-0 inline-flex items-center justify-center transition-all duration-100 bg-gray-300 hover:bg-gray-400 text-black font-1 py-2 ml-4 rounded-xl px-4 h-15 text-2xl cursor-pointer">
-                <option value="font-1">Font 1</option>
-                <option value="font-2">Font 2</option>
-                <option value="font-3">Font 3</option>
-                <option value="font-4">Font 4</option>
-              </select>
-            </div>
-            <p className="font-subtitle text-gray-700">Title Size: {titleSize}</p>
-            <Slider
-              className="w-full"
-              defaultValue={30}
-              min={8}
-              max={50}
-              onChange={(e, value) => setTitleSize(value as number)}
-            />
-            <p className="font-subtitle text-gray-700">Title Position: {titlePosition}</p>
-            <Slider
-              className="w-full"
-              defaultValue={8}
-              min={5}
-              max={30}
-              onChange={(e, value) => setTitlePosition(value as number)}
-            />
-            <div className="flex flex-row">
-              <Input placeholder="Subtitle" className="h-15" onChange={(e) => setSubtitle(e.target.value)}/>
-              <select
-                value={subTitleFont}
-                onChange={(e) => setSubTitleFont(e.target.value)}
-                className="text-center focus:outline-0 inline-flex items-center justify-center transition-all duration-100 bg-gray-300 hover:bg-gray-400 text-black font-1 py-2 ml-4 rounded-xl px-4 h-15 text-2xl cursor-pointer">
-                <option value="font-1">Font 1</option>
-                <option value="font-2">Font 2</option>
-                <option value="font-3">Font 3</option>
-                <option value="font-4">Font 4</option>
-              </select>
-            </div>
-            <p className="font-subtitle text-gray-700">Subtitle Size: {subtitleSize}</p>
-            <Slider
-              className="w-full"
-              defaultValue={16}
-              min={4}
-              max={30}
-              onChange={(e, value) => setSubtitleSize(value as number)}
-            />
-            <p className="font-subtitle text-gray-700">Subtitle Position: {subTitlePosition}</p>
-            <Slider
-              className="w-full"
-              defaultValue={15}
-              min={10}
-              max={65}
-              onChange={(e, value) => setSubtitlePosition(value as number)}
-            />
-            <div className="flex flex-row">
-              <Input placeholder="Bottom Text" className="h-15" onChange={(e) => setBottomText(e.target.value)}/>
-              <select
-                value={bottomTextFont}
-                onChange={(e) => setBottomTextFont(e.target.value)}
-                className="text-center focus:outline-0 inline-flex items-center justify-center transition-all duration-100 bg-gray-300 hover:bg-gray-400 text-black font-1 py-2 ml-4 rounded-xl px-4 h-15 text-2xl cursor-pointer">
-                <option value="font-1">Font 1</option>
-                <option value="font-2">Font 2</option>
-                <option value="font-3">Font 3</option>
-                <option value="font-4">Font 4</option>
-              </select>
-            </div>
-            <p className="font-subtitle text-gray-700">Bottom Text Size: {bottomTextSize}</p>
-            <Slider
-              className="w-full"
-              defaultValue={12}
-              min={2}
-              max={28}
-              onChange={(e, value) => setBottomTextSize(value as number)}
-            />
-            <p className="font-subtitle text-gray-700">Bottom Text Position: {bottomtextPosition}</p>
-            <Slider
-              className="w-full"
-              defaultValue={68}
-              min={50}
-              max={75}
-              onChange={(e, value) => setBottomTextPosition(value as number)}
-            />
-            <input
-              id="file-upload"
-              className="hidden"
-              type="file"
-              ref={fileInput}
-              onChange={uploadFile}
-            />
-            
-            <label
-              htmlFor="file-upload"
-              className="w-full inline-flex items-center justify-center transition-all duration-100 bg-gray-300 hover:bg-gray-400 text-black font-1 py-4 px-4 rounded-xl h-15 text-2xl cursor-pointer">
-              {selectedFileName ?? "Upload Image"}
-            </label>
-            <p className="font-subtitle text-gray-700">Image Position: {imagePosition}</p>
-            <Slider
-              className="w-full"
-              defaultValue={24}
-              min={10}
-              max={40}
-              onChange={(e, value) => setImagePosition(value as number)}
-            />
-            <p className="font-subtitle text-gray-700">Border Radius: {borderRadius}</p>
-            <Slider
-              className="w-full"
-              defaultValue={0}
-              min={0}
-              max={100}
-              onChange={(e, value) => setBorderRadius(value as number)}
-            />
-            <p className="font-subtitle text-gray-700">Border Thickness: {borderThickness}</p>
-            <Slider
-              className="w-full"
-              defaultValue={0}
-              min={0}
-              max={20}
-              onChange={(e, value) => setBorderThickness(value as number)}
-            />
-            <p className="font-subtitle text-gray-700">Border Color: {borderColor}</p>
-            <select
-                value={borderColor}
-                onChange={(e) => setBorderColor(e.target.value)}
-                className="text-center focus:outline-0 w-full inline-flex items-center justify-center transition-all duration-100 bg-gray-300 hover:bg-gray-400 text-black font-1 py-2 px-4 rounded-xl mt-6 h-15 text-2xl cursor-pointer"
-              >
-                <option value="black">Black</option>
-                <option value="grey">Grey</option>
-                <option value="red">Red</option>
-                <option value="blue">Blue</option>
-              </select>
-        </div>
-        </div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+    >
+      <VantaBackground />
 
-        <div className="flex-1">
-          <div className="relative w-full mx-auto overflow-hidden"  style={{ width: '600px', height: '800px' }} id="poster">
-            <img
-              src={`/${option}.png`}
-              alt="Example Poster"
-              width={600}
-              height={800}
-              className="rounded-lg shadow-lg block absolute top-0 left-0 w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 z-10 pointer-events-none flex flex-col items-center p-6">
-              <div className={`absolute pointer-events-auto text-center w-full`} style={{ top: `${titlePosition * 10}px` }}>
-                <h1 className={`${titleFont} text-black max-w-full break-words whitespace-normal`} style={{ fontSize: `${titleSize}px` }}>{title}</h1>
-              </div>
-              <div className={`absolute pointer-events-auto text-center w-full`} style={{ top: `${subTitlePosition * 10}px` }}>
-                <p className={`${subTitleFont} text-black max-w-full break-words whitespace-normal`} style={{ fontSize: `${subtitleSize}px` }}>{subtitle}</p>
-              </div>
-              <img
-                src="/upload-file.png"
-                key="/upload-file.png"
-                width={300}
-                height={300}
-                alt="Uploaded"
-                className="absolute object-contain mx-auto border-3 border-black"
-                style={{ top: `${imagePosition * 10}px`, borderRadius: `${borderRadius}px`, border: `${borderThickness}px solid ${borderColor}` }}
+      <motion.div 
+        className="justify-center flex flex-col items-center"
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1, delay: 0.2 }}
+      >
+        <motion.h1 
+          className="text-8xl font-2 underline mt-10"
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
+          Wild West Poster Generator
+        </motion.h1>
+        <motion.h2 
+          className="text-4xl font-1 mt-20"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
+          Generate your Wild West Poster in 3 easy steps!
+        </motion.h2>
+        <motion.p 
+          className="mt-10 font-subtitle text-xl"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+        >
+          1. Upload your image!<br />2. Customize your poster!<br />3. Download and print!
+        </motion.p>
+      </motion.div>
+
+      <motion.div 
+        className="flex mt-20 items-start gap-10"
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 1 }}
+      >
+        <motion.div 
+          className="flex-1"
+          initial={{ x: -50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.2 }}
+        >
+          <motion.h1 
+            className="text-4xl font-1 mb-8 text-center"
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 1.4 }}
+          >
+            Edit your poster
+          </motion.h1>
+          
+          <motion.div 
+            className="flex gap-4 mb-6 bg-gray-200 p-2 rounded-xl"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.4, delay: 1.6 }}
+          >
+            <motion.button
+              onClick={() => setEditMode("text")}
+              className={`flex-1 py-3 px-4 rounded-xl text-xl font-1 ${
+                editMode === "text" 
+                  ? "bg-gray-400 text-black" 
+                  : "bg-gray-300 hover:bg-gray-400 text-black"
+              }`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+            >
+              Edit Text
+            </motion.button>
+            <motion.button
+              onClick={() => setEditMode("image")}
+              className={`flex-1 py-3 px-4 rounded-xl text-xl font-1 ${
+                editMode === "image" 
+                  ? "bg-gray-400 text-black" 
+                  : "bg-gray-300 hover:bg-gray-400 text-black"
+              }`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+            >
+              Edit Image
+            </motion.button>
+          </motion.div>
+
+          {/* Conditional rendering based on edit mode */}
+          <motion.div
+            key={editMode}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            {editMode === "text" && (
+              <CustomizeText
+                title={title}
+                subtitle={subtitle}
+                bottomText={bottomText}
+                setTitle={setTitle}
+                setSubtitle={setSubtitle}
+                setBottomText={setBottomText}
+                titleSize={titleSize}
+                subtitleSize={subtitleSize}
+                bottomTextSize={bottomTextSize}
+                setTitleSize={setTitleSize}
+                setSubtitleSize={setSubtitleSize}
+                setBottomTextSize={setBottomTextSize}
+                titleFont={titleFont}
+                subTitleFont={subTitleFont}
+                bottomTextFont={bottomTextFont}
+                setTitleFont={setTitleFont}
+                setSubTitleFont={setSubTitleFont}
+                setBottomTextFont={setBottomTextFont}
+                titlePosition={titlePosition}
+                subTitlePosition={subTitlePosition}
+                bottomtextPosition={bottomtextPosition}
+                setTitlePosition={setTitlePosition}
+                setSubtitlePosition={setSubtitlePosition}
+                setBottomTextPosition={setBottomTextPosition}
+                titleColor={titleColor}
+                setTitleColor={setTitleColor}
+                subTitleColor={subTitleColor}
+                setSubTitleColor={setSubTitleColor}
+                bottomTextColor={bottomTextColor}
+                setBottomTextColor={setBottomTextColor}
               />
-              <div className={`absolute pointer-events-auto text-center w-full`} style={{ top: `${bottomtextPosition * 10}px` }}>
-                <p className={`${bottomTextFont} text-black mt-4 mb-4 max-w-full break-words whitespace-normal`} style={{ fontSize: `${bottomTextSize}px` }}>{bottomText}</p>
-              </div>
-            </div>
-          </div>
-            <button
-                className="w-full inline-flex items-center justify-center transition-all duration-100 bg-gray-300 hover:bg-gray-400 text-black font-1 py-2 px-4 rounded-xl mt-6 h-15 text-2xl cursor-pointer" onClick={downloadFile}>
-                Download Image
-              </button>
-              <select
-                value={option}
-                onChange={(e) => setOption(e.target.value)}
-                className="text-center focus:outline-0 w-full inline-flex items-center justify-center transition-all duration-100 bg-gray-300 hover:bg-gray-400 text-black font-1 py-2 px-4 rounded-xl mt-6 h-15 text-2xl cursor-pointer"
-              >
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-                <option value="option4">Option 4</option>
-              </select>
-        </div>
-      </div>
-    </div>
+            )}
+
+            {editMode === "image" && (
+              <CustomizeImage
+                uploadFile={uploadFile}
+                fileInput={fileInput}
+                selectedFileName={selectedFileName}
+                imagePosition={imagePosition}
+                setImagePosition={setImagePosition}
+                borderRadius={borderRadius}
+                setBorderRadius={setBorderRadius}
+                borderThickness={borderThickness}
+                setBorderThickness={setBorderThickness}
+                borderColor={borderColor}
+                setBorderColor={setBorderColor}
+                imageSize={imageSize}
+                setImageSize={setImageSize}
+              />
+            )}
+          </motion.div>
+        </motion.div>
+
+        <motion.div 
+          className="flex-1"
+          initial={{ x: 50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.2 }}
+        >
+          <Poster
+            option={option}
+            title={title}
+            subtitle={subtitle}
+            bottomText={bottomText}
+            uploadedUrl={uploadedUrl}
+            titleFont={titleFont}
+            subTitleFont={subTitleFont}
+            bottomTextFont={bottomTextFont}
+            titleSize={titleSize}
+            subtitleSize={subtitleSize}
+            bottomTextSize={bottomTextSize}
+            titlePosition={titlePosition}
+            subTitlePosition={subTitlePosition}
+            bottomtextPosition={bottomtextPosition}
+            imagePosition={imagePosition}
+            imageSize={imageSize}
+            borderRadius={borderRadius}
+            borderThickness={borderThickness}
+            borderColor={borderColor}
+            titleColor={titleColor}
+            subTitleColor={subTitleColor}
+            bottomTextColor={bottomTextColor}
+          />
+
+          <motion.button
+            onClick={downloadFile}
+            className="w-full inline-flex items-center justify-center bg-gray-300 hover:bg-gray-400 text-black font-1 py-2 px-4 rounded-xl mt-6 h-15 text-2xl cursor-pointer"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            Download Poster
+          </motion.button>
+
+          <motion.select
+            value={option}
+            onChange={(e) => setOption(e.target.value)}
+            className="text-center w-full inline-flex items-center justify-center bg-gray-300 hover:bg-gray-400 text-black font-1 py-2 px-4 rounded-xl mt-6 h-15 text-2xl cursor-pointer focus:outline-0"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+            <option value="option4">Option 4</option>
+          </motion.select>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 }
