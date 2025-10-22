@@ -12,6 +12,9 @@ export async function POST(request: NextRequest) {
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
+    if (!(file instanceof File)) {
+      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+    }
     if (file.type !== "image/png" && file.type !== "image/jpeg") {
       return NextResponse.json({ error: "Invalid file type" }, { status: 400 });
     }
