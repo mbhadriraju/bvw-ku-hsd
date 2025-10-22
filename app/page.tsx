@@ -1,6 +1,5 @@
 'use client'
 
-import Image from "next/image";
 import VantaBackground from "../components/VantaBackground"
 import Input from "../components/Input"
 import { useState, useRef, useEffect } from "react";

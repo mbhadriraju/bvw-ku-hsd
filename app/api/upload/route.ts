@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     }
     const newFileName = "upload-file.png";
 
-    const arrayBuffer = await (file as any).arrayBuffer();
+    const arrayBuffer = await (file as File).arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
     const publicDir = path.join(process.cwd(), "public");

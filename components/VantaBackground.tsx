@@ -5,7 +5,7 @@ import FOG from "vanta/dist/vanta.fog.min";
 
 export default function VantaBackground() {
   const vantaRef = useRef<HTMLDivElement | null>(null);
-  const [vantaEffect, setVantaEffect] = useState<any>(null);
+  const [vantaEffect, setVantaEffect] = useState<{ destroy: () => void } | null>(null);
 
   useEffect(() => {
     if (!vantaEffect && vantaRef.current) {
