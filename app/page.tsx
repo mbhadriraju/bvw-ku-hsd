@@ -177,7 +177,7 @@ export default function Home() {
               defaultValue={12}
               min={2}
               max={28}
-              onChange={(e) => setBottomTextSize(value as number)}
+              onChange={(e, value) => setBottomTextSize(value as number)}
             />
             <p className="font-subtitle text-gray-700">Bottom Text Position: {bottomtextPosition}</p>
             <Slider
