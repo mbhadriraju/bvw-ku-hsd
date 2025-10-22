@@ -50,7 +50,7 @@ export default function CustomizeText({
         transition={{ duration: 0.4, delay: 0.1 }}
       >
         <Input
-          placeholder="Name"
+          placeholder="Title"
           className="h-15"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -93,7 +93,7 @@ export default function CustomizeText({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.2 }}
       >
-        <p className="font-subtitle text-gray-700">Title Size: {titleSize}</p>
+        <p className="font-subtitle text-gray-200">Title Size: {titleSize}</p>
         <Slider min={8} max={50} value={titleSize} onChange={(e, v) => setTitleSize(v)} />
       </motion.div>
 
@@ -102,7 +102,7 @@ export default function CustomizeText({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.3 }}
       >
-        <p className="font-subtitle text-gray-700">Title Position: {titlePosition}</p>
+        <p className="font-subtitle text-gray-200">Title Position: {titlePosition}</p>
         <Slider min={5} max={30} value={titlePosition} onChange={(e, v) => setTitlePosition(v)} />
       </motion.div>
 
@@ -113,7 +113,7 @@ export default function CustomizeText({
         transition={{ duration: 0.4, delay: 0.4 }}
       >
         <Input
-          placeholder="Location"
+          placeholder="Name"
           className="h-15"
           value={subtitle}
           onChange={(e) => setSubtitle(e.target.value)}
@@ -151,10 +151,10 @@ export default function CustomizeText({
         </motion.select>
       </motion.div>
 
-      <p className="font-subtitle text-gray-700">Subtitle Size: {subtitleSize}</p>
+      <p className="font-subtitle text-gray-200">Name Size: {subtitleSize}</p>
       <Slider min={4} max={30} value={subtitleSize} onChange={(e, v) => setSubtitleSize(v)} />
 
-      <p className="font-subtitle text-gray-700">Subtitle Position: {subTitlePosition}</p>
+      <p className="font-subtitle text-gray-200">Name Position: {subTitlePosition}</p>
       <Slider min={10} max={65} value={subTitlePosition} onChange={(e, v) => setSubtitlePosition(v)} />
 
       <motion.div 
@@ -164,7 +164,7 @@ export default function CustomizeText({
         transition={{ duration: 0.4, delay: 0.7 }}
       >
         <Input
-          placeholder="Bottom Text"
+          placeholder="Location"
           className="h-15"
           value={bottomText}
           onChange={(e) => setBottomText(e.target.value)}
@@ -207,7 +207,7 @@ export default function CustomizeText({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.8 }}
       >
-        <p className="font-subtitle text-gray-700">Bottom Size: {bottomTextSize}</p>
+        <p className="font-subtitle text-gray-200">Location Size: {bottomTextSize}</p>
         <Slider min={2} max={28} value={bottomTextSize} onChange={(e, v) => setBottomTextSize(v)} />
       </motion.div>
 
@@ -216,7 +216,7 @@ export default function CustomizeText({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.9 }}
       >
-        <p className="font-subtitle text-gray-700">Bottom Position: {bottomtextPosition}</p>
+        <p className="font-subtitle text-gray-200">Location Position: {bottomtextPosition}</p>
         <Slider min={50} max={75} value={bottomtextPosition} onChange={(e, v) => setBottomTextPosition(v)} />
       </motion.div>
     </motion.div>

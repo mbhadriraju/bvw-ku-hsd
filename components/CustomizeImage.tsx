@@ -16,7 +16,9 @@ export default function CustomizeImage({
   borderColor,
   setBorderColor,
   imageSize,
-  setImageSize
+  setImageSize,
+  autoFaceCrop,
+  isProcessing = false
 }) {
   return (
     <motion.div 
@@ -46,7 +48,7 @@ export default function CustomizeImage({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.2 }}
       >
-        <p className="font-subtitle text-gray-700">Image Position: {imagePosition}</p>
+        <p className="font-subtitle text-gray-200">Image Position: {imagePosition}</p>
         <Slider min={10} max={40} value={imagePosition} onChange={(e, v) => setImagePosition(v)} />
       </motion.div>
 
@@ -55,7 +57,7 @@ export default function CustomizeImage({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.3 }}
       >
-        <p className="font-subtitle text-gray-700">Border Radius: {borderRadius}</p>
+        <p className="font-subtitle text-gray-200">Border Radius: {borderRadius}</p>
         <Slider min={0} max={100} value={borderRadius} onChange={(e, v) => setBorderRadius(v)} />
       </motion.div>
 
@@ -64,7 +66,7 @@ export default function CustomizeImage({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.4 }}
       >
-        <p className="font-subtitle text-gray-700">Border Thickness: {borderThickness}</p>
+        <p className="font-subtitle text-gray-200">Border Thickness: {borderThickness}</p>
         <Slider min={0} max={20} value={borderThickness} onChange={(e, v) => setBorderThickness(v)} />
       </motion.div>
 
@@ -73,7 +75,7 @@ export default function CustomizeImage({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.5 }}
       >
-        <p className="font-subtitle text-gray-700">Image Size: {imageSize}</p>
+        <p className="font-subtitle text-gray-200">Image Size: {imageSize}</p>
         <Slider min={100} max={500} value={imageSize} onChange={(e, v) => setImageSize(v)} />
       </motion.div>
 
@@ -83,7 +85,7 @@ export default function CustomizeImage({
         transition={{ duration: 0.3, delay: 0.6 }}
         className="flex flex-row"
       >
-        <p className="font-1 text-2xl whitespace-nowrap mt-4 mr-6">Border Color:</p>
+        <p className="font-1 text-2xl whitespace-nowrap mt-4 mr-6 text-gray-200">Border Color:</p>
         <motion.select
             value={borderColor}
             onChange={(e) => setBorderColor(e.target.value)}
@@ -104,6 +106,19 @@ export default function CustomizeImage({
             <option value="gray">Gray</option>
         </motion.select>
       </motion.div>
+      <motion.button
+            onClick={autoFaceCrop}
+            disabled={isProcessing}
+            className={`w-full inline-flex items-center justify-center font-1 py-4 px-4 rounded-xl h-15 text-2xl cursor-pointer ${
+              isProcessing 
+                ? "bg-gray-500 text-gray-300 cursor-not-allowed" 
+                : "bg-gray-300 hover:bg-gray-400 text-black"
+            }`}
+            whileHover={!isProcessing ? { scale: 1.02 } : {}}
+            whileTap={!isProcessing ? { scale: 0.98 } : {}}
+        >
+            {isProcessing ? "Processing..." : "Auto Face Crop"}
+      </motion.button>
     </motion.div>
   );
 }
