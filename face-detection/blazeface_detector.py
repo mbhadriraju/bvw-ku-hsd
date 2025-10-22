@@ -128,7 +128,7 @@ class BlazeFaceDetector:
                 faces.append({
                     "id": i,
                     "confidence": float(score),
-                    "bounding_box": {"x": x1, "y": y1, "width": x2-x1 + 30, "height": y2-y1 + 30},
+                    "bounding_box": {"x": x1 - 15, "y": y1 - 15, "width": x2-x1 + 30, "height": y2-y1 + 30},
                     "landmarks": landmarks
                 })
             return faces
