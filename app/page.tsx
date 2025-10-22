@@ -191,10 +191,7 @@ export default function Home() {
             
             alert(`Face detected and cropped! Found ${faces.length} face(s) using real BlazeFace ONNX model via Python API.`);
           } else {
-            // No faces detected, create center crop as fallback
-            const croppedImageUrl = await faceDetector.cropToFace(img, []);
-            setUploadedUrl(croppedImageUrl);
-            alert("No faces detected. Applied center crop instead.");
+            alert("No faces detected.");
           }
         } catch (error) {
           console.error("Face detection error:", error);
